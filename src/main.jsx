@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
         <QueryClientProvider client={queryClient}>
             <App />
-            <ToastContainer position="top-right" autoClose={2500} />
+            <ToastContainer position="top-right" autoClose={3000} />
             {import.meta.env.DEV ? (
                 <ReactQueryDevtools initialIsOpen={false} />
             ) : null}
