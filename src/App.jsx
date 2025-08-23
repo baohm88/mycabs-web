@@ -1,4 +1,3 @@
-// UPDATED: thêm HomeRedirect + routes Register & OTP pages; tránh redirect loop khi chưa login
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AppShell from "./components/AppShell";
@@ -7,12 +6,16 @@ import Register from "./pages/Register";
 import Notifications from "./pages/Notifications";
 import AdminDashboard from "./pages/AdminDashboard";
 import Protected from "./components/Protected";
-// NEW: OTP pages
+// OTP
 import OtpRequest from "./pages/OtpRequest";
 import OtpVerify from "./pages/OtpVerify";
 import OtpReset from "./pages/OtpReset";
+// Riders
+import RiderCompanies from "./pages/RiderCompanies";
+import RiderDrivers from "./pages/RiderDrivers";
+import Ratings from "./pages/Ratings";
+import RatingCreate from "./pages/RatingCreate";
 
-// UPDATED: Quyết định trang đích dựa theo trạng thái đăng nhập
 function HomeRedirect() {
     const token = useSelector((s) => s.auth.token);
     return <Navigate to={token ? "/notifications" : "/login"} replace />;
@@ -23,15 +26,32 @@ export default function App() {
         <BrowserRouter>
             <Routes>
                 <Route element={<AppShell />}>
-                    {/* UPDATED: dùng HomeRedirect thay vì điều hướng cứng */}
                     <Route index element={<HomeRedirect />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
 
-                    {/* NEW: OTP flows */}
+                    {/* OTP */}
                     <Route path="/otp/request" element={<OtpRequest />} />
-                    <Route path="/otp/verify_email" element={<OtpVerify />} />
-                    <Route path="/otp/reset_password" element={<OtpReset />} />
+                    <Route path="/otp/verify" element={<OtpVerify />} />
+                    <Route path="/otp/reset" element={<OtpReset />} />
+
+                    {/* Riders (public) */}
+                    <Route
+                        path="/riders/companies"
+                        element={<RiderCompanies />}
+                    />
+                    <Route path="/riders/drivers" element={<RiderDrivers />} />
+                    <Route path="/riders/ratings" element={<Ratings />} />
+
+                    {/* Create rating requires login */}
+                    <Route
+                        path="/riders/rate"
+                        element={
+                            <Protected>
+                                <RatingCreate />
+                            </Protected>
+                        }
+                    />
 
                     {/* Auth required */}
                     <Route

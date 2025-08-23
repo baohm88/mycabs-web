@@ -18,12 +18,10 @@ export default function AppShell() {
     const nav = useNavigate();
     const loc = useLocation();
 
-    // Start hubs after login
     useEffect(() => {
         let mounted = true;
         async function boot() {
             if (!token) return;
-            // initial unread sync
             try {
                 const res = await api.get("/api/notifications/unread-count");
                 const count = res?.data?.data?.count ?? 0;
@@ -36,11 +34,10 @@ export default function AppShell() {
                 onChat: (m) => console.log("chat.message", m),
             });
 
-            if (role === "Admin") {
+            if (role === "Admin")
                 await startAdminHub({
-                    onTxNew: (tx) => console.log("admin:tx:new", tx),
+                    onTxNew: () => console.log("admin:tx:new"),
                 });
-            }
         }
         boot();
         return () => {
@@ -64,6 +61,26 @@ export default function AppShell() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
+                            {/* Riders (public) */}
+                            <Nav.Link
+                                as={Link}
+                                to="/riders/companies"
+                                active={loc.pathname.startsWith(
+                                    "/riders/companies"
+                                )}
+                            >
+                                Companies
+                            </Nav.Link>
+                            <Nav.Link
+                                as={Link}
+                                to="/riders/drivers"
+                                active={loc.pathname.startsWith(
+                                    "/riders/drivers"
+                                )}
+                            >
+                                Drivers
+                            </Nav.Link>
+
                             {token && (
                                 <Nav.Link
                                     as={Link}
