@@ -27,7 +27,7 @@ export default function CompanyHeader() {
             <div>
                 <div className="h5 mb-0">
                     {c.name || c.Name}{" "}
-                    <small className="text-muted">#{c.id || c.Id}</small>
+                    {/* <small className="text-muted">#{c.id || c.Id}</small> */}
                 </div>
                 <div className="small text-muted">
                     {c.address || c.Address || ""}

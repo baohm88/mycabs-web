@@ -31,6 +31,7 @@ function HomeRedirect() {
     return <Navigate to={token ? "/notifications" : "/login"} replace />;
 }
 
+
 export default function App() {
     return (
         <BrowserRouter>
