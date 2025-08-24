@@ -111,7 +111,7 @@ export default function OtpRequest() {
                     <Button type="submit" disabled={form.isSubmitting}>
                         {form.isSubmitting ? "…" : "Gửi mã"}
                     </Button>
-                    <div className="small mt-3">
+                    {/* <div className="small mt-3">
                         Có mã rồi?{" "}
                         <Link
                             to={`/otp/verify_email?email=${encodeURIComponent(
@@ -128,7 +128,7 @@ export default function OtpRequest() {
                         >
                             Đặt lại mật khẩu
                         </Link>
-                    </div>
+                    </div> */}
                 </form>
             </Card.Body>
         </Card>

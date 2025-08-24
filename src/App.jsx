@@ -16,6 +16,16 @@ import RiderDrivers from "./pages/RiderDrivers";
 import Ratings from "./pages/Ratings";
 import RatingCreate from "./pages/RatingCreate";
 
+// OPTIONAL — if you want quick links/routes (owner view)
+// Add to App.jsx
+import CompanyServices from "./pages/company/CompanyServices";
+import CompanyWallet from "./pages/company/CompanyWallet";
+import CompanyTransactions from "./pages/company/CompanyTransactions";
+import CompanyApplications from "./pages/company/CompanyApplications";
+import CompanyInvitations from "./pages/company/CompanyInvitations";
+import Profile from "./pages/Profile";
+import UpdateAccount from "./pages/UpdateAccount";
+
 function HomeRedirect() {
     const token = useSelector((s) => s.auth.token);
     return <Navigate to={token ? "/notifications" : "/login"} replace />;
@@ -29,12 +39,10 @@ export default function App() {
                     <Route index element={<HomeRedirect />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
-
                     {/* OTP */}
                     <Route path="/otp/request" element={<OtpRequest />} />
-                    <Route path="/otp/verify" element={<OtpVerify />} />
-                    <Route path="/otp/reset" element={<OtpReset />} />
-
+                    <Route path="/otp/verify_email" element={<OtpVerify />} />
+                    <Route path="/otp/reset_password" element={<OtpReset />} />
                     {/* Riders (public) */}
                     <Route
                         path="/riders/companies"
@@ -42,7 +50,6 @@ export default function App() {
                     />
                     <Route path="/riders/drivers" element={<RiderDrivers />} />
                     <Route path="/riders/ratings" element={<Ratings />} />
-
                     {/* Create rating requires login */}
                     <Route
                         path="/riders/rate"
@@ -52,7 +59,6 @@ export default function App() {
                             </Protected>
                         }
                     />
-
                     {/* Auth required */}
                     <Route
                         path="/notifications"
@@ -62,7 +68,6 @@ export default function App() {
                             </Protected>
                         }
                     />
-
                     {/* Admin required */}
                     <Route
                         path="/admin"
@@ -72,7 +77,67 @@ export default function App() {
                             </Protected>
                         }
                     />
+                    {/* Company */}
+                    <Route
+                        path="/companies/:id/services"
+                        element={
+                            <Protected>
+                                <CompanyServices />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/companies/:id/wallet"
+                        element={
+                            <Protected>
+                                <CompanyWallet />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/companies/:id/transactions"
+                        element={
+                            <Protected>
+                                <CompanyTransactions />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/companies/:id/applications"
+                        element={
+                            <Protected>
+                                <CompanyApplications />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/companies/:id/invitations"
+                        element={
+                            <Protected>
+                                <CompanyInvitations />
+                            </Protected>
+                        }
+                    />
+                    //{" "}
+                    <Route
+                        path="/profile"
+                        element={
+                            <Protected>
+                                <Profile />
+                            </Protected>
+                        }
+                    />
+                    //{" "}
+                    <Route
+                        path="/update-account"
+                        element={
+                            <Protected>
+                                <UpdateAccount />
+                            </Protected>
+                        }
+                    />
                 </Route>
+
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>

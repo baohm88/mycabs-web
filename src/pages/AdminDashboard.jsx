@@ -25,8 +25,6 @@ async function fetchDaily() {
 }
 async function fetchTopCompanies() {
     const res = await api.get("/api/admin/reports/top-companies");
-    console.log("TOP COMPANIES: ", res.data?.data);
-
     return res.data?.data;
 }
 async function fetchTopDrivers() {

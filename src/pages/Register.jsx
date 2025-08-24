@@ -34,7 +34,7 @@ export default function Register() {
                 console.log("REGISTER RES: ", res.data);
 
                 if (res?.data?.success) {
-                    toast.success("Registered successfully! Please log in.");
+                    toast.success("Registered successfully! Please verify your email");
                     nav("/otp/request?mode=verify", { replace: true });
                 } else {
                     throw new Error("Register failed");

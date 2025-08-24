@@ -1,140 +1,147 @@
-import { Container, Navbar, Nav, Badge, Button } from "react-bootstrap";
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+// import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
+// import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+// import { useSelector, useDispatch } from "react-redux";
+// import { logout } from "../store/authSlice";
+
+// export default function AppShell() {
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+//   const user = useSelector((s) => s.auth.user); // UPDATED: read profile.user from store
+
+//   // UPDATED: avatar source with fallback
+//   const avatarSrc = user?.image_url ||
+//     "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png";
+
+//   const onLogout = () => {
+//     dispatch(logout()); // UPDATED: clear auth state
+//     navigate("/login");
+//   };
+
+//   return (
+//     <>
+//       <Navbar bg="light" expand="md" className="shadow-sm">
+//         <Container>
+//           <Navbar.Brand as={Link} to="/">MyCabs</Navbar.Brand>
+//           <Navbar.Toggle aria-controls="main-nav" />
+//           <Navbar.Collapse id="main-nav" className="justify-content-end">
+//             <Nav className="me-2">
+//               {/* keep your existing nav links here */}
+//               <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+//               <Nav.Link as={NavLink} to="/profile">Profile</Nav.Link>
+//             </Nav>
+
+//             {/* NEW: Avatar dropdown on the right */}
+//             <Nav>
+//               <NavDropdown
+//                 align="end"
+//                 id="nav-avatar-dropdown"
+//                 title={
+//                   <Image
+//                     src={avatarSrc}
+//                     roundedCircle
+//                     alt="avatar"
+//                     style={{ width: 30, height: 30, objectFit: "cover" }}
+//                   />
+//                 }
+//               >
+//                 {/* NEW: show email as first item (disabled) */}
+//                 <NavDropdown.Item disabled className="small text-muted">
+//                   {user?.email || "Account"}
+//                 </NavDropdown.Item>
+//                 <NavDropdown.Divider />
+//                 {/* NEW: logout */}
+//                 <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
+//               </NavDropdown>
+//             </Nav>
+//           </Navbar.Collapse>
+//         </Container>
+//       </Navbar>
+
+//       <main className="py-3">
+//         <Container>
+//           <Outlet />
+//         </Container>
+//       </main>
+//     </>
+//   );
+// }
+
+// src/layout/AppShell.jsx
+// UPDATED: conditionally render avatar dropdown (when logged in) or Login button
+// CHANGED: moved Profile into the avatar dropdown
+
+import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/authSlice";
-import { setUnread } from "../store/uiSlice";
-import {
-    startNotificationsHub,
-    startAdminHub,
-    stopAllHubs,
-} from "../lib/singalr.js";
-import api from "../lib/axios";
-import { useEffect } from "react";
 
 export default function AppShell() {
-    const { token, role } = useSelector((s) => s.auth);
-    const unread = useSelector((s) => s.ui.unreadCount);
-    const dispatch = useDispatch();
-    const nav = useNavigate();
-    const loc = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAuthenticated, user } = useSelector((s) => s.auth);
 
-    useEffect(() => {
-        let mounted = true;
-        async function boot() {
-            if (!token) return;
-            try {
-                const res = await api.get("/api/notifications/unread-count");
-                const count = res?.data?.data?.count ?? 0;
-                if (mounted) dispatch(setUnread(count));
-            } catch {}
+  const avatarSrc =
+    user?.image_url ||
+    "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png";
 
-            await startNotificationsHub({
-                onUnread: ({ count }) => dispatch(setUnread(count ?? 0)),
-                onNotification: (p) => console.log("notification", p),
-                onChat: (m) => console.log("chat.message", m),
-            });
+  const onLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
-            if (role === "Admin")
-                await startAdminHub({
-                    onTxNew: () => console.log("admin:tx:new"),
-                });
-        }
-        boot();
-        return () => {
-            mounted = false;
-        };
-    }, [token, role, dispatch]);
+  const goProfile = () => navigate("/profile"); // NEW
 
-    function doLogout() {
-        stopAllHubs();
-        dispatch(logout());
-        nav("/login");
-    }
+  return (
+    <>
+      <Navbar bg="light" expand="md" className="shadow-sm">
+        <Container>
+          <Navbar.Brand as={Link} to="/">MyCabs</Navbar.Brand>
+          <Navbar.Toggle aria-controls="main-nav" />
+          <Navbar.Collapse id="main-nav" className="justify-content-end">
+            <Nav className="me-2">
+              <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+              {/* CHANGED: removed top-level Profile link */}
+            </Nav>
 
-    return (
-        <>
-            <Navbar bg="light" expand="sm" className="mb-3">
-                <Container>
-                    <Navbar.Brand as={Link} to="/">
-                        <b>My</b>Cabs
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            {/* Riders (public) */}
-                            <Nav.Link
-                                as={Link}
-                                to="/riders/companies"
-                                active={loc.pathname.startsWith(
-                                    "/riders/companies"
-                                )}
-                            >
-                                Companies
-                            </Nav.Link>
-                            <Nav.Link
-                                as={Link}
-                                to="/riders/drivers"
-                                active={loc.pathname.startsWith(
-                                    "/riders/drivers"
-                                )}
-                            >
-                                Drivers
-                            </Nav.Link>
+            {isAuthenticated ? (
+              // Avatar Dropdown when logged in
+              <Nav>
+                <NavDropdown
+                  align="end"
+                  id="nav-avatar-dropdown"
+                  title={
+                    <Image
+                      src={avatarSrc}
+                      roundedCircle
+                      alt="avatar"
+                      style={{ width: 30, height: 30, objectFit: "cover" }}
+                    />
+                  }
+                >
+                  <NavDropdown.Item disabled className="small text-muted">
+                    {user?.email || "Account"}
+                  </NavDropdown.Item>
+                  {/* NEW: Profile in dropdown */}
+                  <NavDropdown.Item onClick={goProfile}>Profile</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            ) : (
+              // Login button when logged out
+              <Nav>
+                <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+              </Nav>
+            )}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
-                            {token && (
-                                <Nav.Link
-                                    as={Link}
-                                    to="/notifications"
-                                    active={loc.pathname === "/notifications"}
-                                >
-                                    Notifications{" "}
-                                    {unread > 0 && (
-                                        <Badge
-                                            bg="primary"
-                                            pill
-                                            className="ms-1"
-                                        >
-                                            {unread}
-                                        </Badge>
-                                    )}
-                                </Nav.Link>
-                            )}
-                            {token && role === "Admin" && (
-                                <Nav.Link
-                                    as={Link}
-                                    to="/admin"
-                                    active={loc.pathname === "/admin"}
-                                >
-                                    Admin
-                                </Nav.Link>
-                            )}
-                        </Nav>
-                        <div className="d-flex gap-2">
-                            {!token ? (
-                                <Button
-                                    size="sm"
-                                    variant="outline-primary"
-                                    as={Link}
-                                    to="/login"
-                                >
-                                    Login
-                                </Button>
-                            ) : (
-                                <Button
-                                    size="sm"
-                                    variant="outline-danger"
-                                    onClick={doLogout}
-                                >
-                                    Logout
-                                </Button>
-                            )}
-                        </div>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-            <Container className="pb-4">
-                <Outlet />
-            </Container>
-        </>
-    );
+      <main className="py-3">
+        <Container>
+          <Outlet />
+        </Container>
+      </main>
+    </>
+  );
 }
