@@ -32,7 +32,7 @@ export default function UpdateAccount() {
         }),
         onSubmit: async (v, { setSubmitting }) => {
             try {
-                await updateAccount({
+                const res = await updateAccount({
                     fullName: v.fullName || undefined,
                     driverPhone: role === "Driver" ? v.driverPhone : undefined,
                     driverBio: role === "Driver" ? v.driverBio : undefined,
@@ -42,7 +42,8 @@ export default function UpdateAccount() {
                     companyAddress:
                         role === "Company" ? v.companyAddress : undefined,
                 });
-                
+
+                console.log("update account res: ", res);
 
                 toast.success("Account pdated successfully!");
                 navigate("/profile");

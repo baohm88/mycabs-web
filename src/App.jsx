@@ -10,27 +10,33 @@ import Protected from "./components/Protected";
 import OtpRequest from "./pages/OtpRequest";
 import OtpVerify from "./pages/OtpVerify";
 import OtpReset from "./pages/OtpReset";
+import Profile from "./pages/Profile";
+import UpdateAccount from "./pages/UpdateAccount";
+
 // Riders
-import RiderCompanies from "./pages/RiderCompanies";
-import RiderDrivers from "./pages/RiderDrivers";
+import RiderCompanies from "./pages/rider/RiderCompanies";
+import RiderDrivers from "./pages/rider/RiderDrivers";
 import Ratings from "./pages/Ratings";
 import RatingCreate from "./pages/RatingCreate";
 
-// OPTIONAL — if you want quick links/routes (owner view)
-// Add to App.jsx
+// Companies
 import CompanyServices from "./pages/company/CompanyServices";
 import CompanyWallet from "./pages/company/CompanyWallet";
 import CompanyTransactions from "./pages/company/CompanyTransactions";
 import CompanyApplications from "./pages/company/CompanyApplications";
 import CompanyInvitations from "./pages/company/CompanyInvitations";
-import Profile from "./pages/Profile";
-import UpdateAccount from "./pages/UpdateAccount";
+
+// Drivers
+import DriverOpenings from "./pages/driver/DriverOpenings";
+import DriverInvitations from "./pages/driver/DriverInvitations";
+import DriverApplications from "./pages/driver/DriverApplications";
+import DriverWallet from "./pages/driver/DriverWallet";
+import DriverTransactions from "./pages/driver/DriverTransactions";
 
 function HomeRedirect() {
     const token = useSelector((s) => s.auth.token);
     return <Navigate to={token ? "/notifications" : "/login"} replace />;
 }
-
 
 export default function App() {
     return (
@@ -38,15 +44,23 @@ export default function App() {
             <Routes>
                 <Route element={<AppShell />}>
                     <Route index element={<HomeRedirect />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} /> // OK
+                    <Route path="/register" element={<Register />} /> // OK
                     {/* OTP */}
-                    <Route path="/otp/request" element={<OtpRequest />} />
-                    <Route path="/otp/verify_email" element={<OtpVerify />} />
-                    <Route path="/otp/reset_password" element={<OtpReset />} />
+                    <Route path="/otp/request" element={<OtpRequest />} /> // OK
+                    <Route
+                        path="/otp/verify_email"
+                        element={<OtpVerify />}
+                    />{" "}
+                    // OK
+                    <Route
+                        path="/otp/reset_password"
+                        element={<OtpReset />}
+                    />{" "}
+                    // OK
                     {/* Riders (public) */}
                     <Route
-                        path="/riders/companies"
+                        path="/riders/companies" // OK
                         element={<RiderCompanies />}
                     />
                     <Route path="/riders/drivers" element={<RiderDrivers />} />
@@ -82,7 +96,7 @@ export default function App() {
                     <Route
                         path="/companies/:id/services"
                         element={
-                            <Protected>
+                            <Protected role="Company">
                                 <CompanyServices />
                             </Protected>
                         }
@@ -90,7 +104,7 @@ export default function App() {
                     <Route
                         path="/companies/:id/wallet"
                         element={
-                            <Protected>
+                            <Protected role="Company">
                                 <CompanyWallet />
                             </Protected>
                         }
@@ -98,7 +112,7 @@ export default function App() {
                     <Route
                         path="/companies/:id/transactions"
                         element={
-                            <Protected>
+                            <Protected role="Company">
                                 <CompanyTransactions />
                             </Protected>
                         }
@@ -106,7 +120,7 @@ export default function App() {
                     <Route
                         path="/companies/:id/applications"
                         element={
-                            <Protected>
+                            <Protected role="Company">
                                 <CompanyApplications />
                             </Protected>
                         }
@@ -114,7 +128,7 @@ export default function App() {
                     <Route
                         path="/companies/:id/invitations"
                         element={
-                            <Protected>
+                            <Protected role="Company">
                                 <CompanyInvitations />
                             </Protected>
                         }
@@ -134,6 +148,47 @@ export default function App() {
                         element={
                             <Protected>
                                 <UpdateAccount />
+                            </Protected>
+                        }
+                    />
+                    {/* Drivers */}
+                    <Route
+                        path="/drivers/me/openings"
+                        element={
+                            <Protected role="Driver">
+                                <DriverOpenings />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/drivers/me/invitations"
+                        element={
+                            <Protected role="Driver">
+                                <DriverInvitations />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/drivers/me/applications"
+                        element={
+                            <Protected role="Driver">
+                                <DriverApplications />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/drivers/me/wallet"
+                        element={
+                            <Protected role="Driver">
+                                <DriverWallet />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/drivers/me/transactions"
+                        element={
+                            <Protected role="Driver">
+                                <DriverTransactions />
                             </Protected>
                         }
                     />

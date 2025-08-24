@@ -3,12 +3,14 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/authSlice";
 import CompanyLinks from "../pages/company/CompanyLinks";
+import DriverLinks from "../pages/driver/DriverLinks";
 
 export default function AppShell() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isAuthenticated, user, company } = useSelector((s) => s.auth);
-
+    const { isAuthenticated, user, company, driver } = useSelector(
+        (s) => s.auth
+    ); // CHANGED
     const avatarSrc =
         user?.image_url ||
         "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png";
@@ -17,10 +19,8 @@ export default function AppShell() {
         dispatch(logout());
         navigate("/login");
     };
-
     const goProfile = () => navigate("/profile");
-
-    const companyId = company?.id || company?.Id;
+    const goNotifications = () => navigate("/notifications");
 
     return (
         <>
@@ -32,18 +32,22 @@ export default function AppShell() {
                     <Navbar.Toggle aria-controls="main-nav" />
                     <Navbar.Collapse
                         id="main-nav"
-                        className="justify-content-end"
+                        className="justify-content-between"
                     >
                         <Nav className="me-2">
-                            <Nav.Link as={NavLink} to="/">
-                                Home
+                            <Nav.Link as={NavLink} to="/riders/companies">
+                                Companies
                             </Nav.Link>
-                            {/* CHANGED: removed top-level Profile link */}
+                            <Nav.Link as={NavLink} to="/riders/drivers">
+                                Drivers
+                            </Nav.Link>
                         </Nav>
 
                         {isAuthenticated ? (
-                            // Avatar Dropdown when logged in
                             <Nav>
+                                <Nav.Link as={NavLink} to="/notifications">
+                                    <i className="bi bi-bell-fill fs-5 text-muted"></i>
+                                </Nav.Link>
                                 <NavDropdown
                                     align="end"
                                     id="nav-avatar-dropdown"
@@ -66,12 +70,24 @@ export default function AppShell() {
                                     >
                                         {user?.email || "Account"}
                                     </NavDropdown.Item>
+
                                     <NavDropdown.Item onClick={goProfile}>
                                         Profile
                                     </NavDropdown.Item>
-                                    {user.role === "Company" && companyId && (
-                                        <CompanyLinks companyId={companyId} />
+
+                                    {/* Company menu (pass đúng company.id thay vì user.id) */}
+                                    {user?.role === "Company" &&
+                                        company?.id && (
+                                            <CompanyLinks
+                                                companyId={company.id}
+                                            />
+                                        )}
+
+                                    {/* Driver menu */}
+                                    {user?.role === "Driver" && driver && (
+                                        <DriverLinks />
                                     )}
+
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item onClick={onLogout}>
                                         Logout
@@ -79,7 +95,6 @@ export default function AppShell() {
                                 </NavDropdown>
                             </Nav>
                         ) : (
-                            // Login button when logged out
                             <Nav>
                                 <Nav.Link as={NavLink} to="/login">
                                     Login

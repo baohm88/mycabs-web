@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getDrivers } from "../lib/riders";
+import { getDrivers } from "../../lib/riders";
 import { Table, Form, Button } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
-import RatingSummary from "../components/RatingSummary";
+import RatingSummary from "../../components/RatingSummary";
 
 export default function RiderDrivers() {
     const [sp] = useSearchParams();

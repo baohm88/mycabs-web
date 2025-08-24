@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../lib/riders";
+import { getCompanies } from "../../lib/riders";
 import { Table, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import RatingSummary from "../components/RatingSummary";
+import RatingSummary from "../../components/RatingSummary";
 
 export default function RiderCompanies() {
     const [q, setQ] = useState("");

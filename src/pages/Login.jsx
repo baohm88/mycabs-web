@@ -27,8 +27,12 @@ export default function Login() {
         if (!data?.accessToken) throw new Error("No token in response");
         dispatch(setAuth(data));
         toast.success("Logged in!");
-        const to = loc.state?.from?.pathname || "/";
-        nav(to, { replace: true });
+        // const to = loc.state?.from?.pathname || "/";
+        // nav(to, { replace: true });
+        const from = loc.state?.from?.pathname
+        const isBlocked = from && (from.startsWith('/companies/') || from.startsWith('/admin'))
+        // luôn đưa về notifications nếu "from" là trang không phù hợp
+        nav(isBlocked ? '/notifications' : (from || '/notifications'), { replace: true })
       } catch (err) {
         console.error(err);
         const msg = err?.response?.data?.error?.message || "Login failed";
