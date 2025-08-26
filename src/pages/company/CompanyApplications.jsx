@@ -62,13 +62,7 @@ export default function CompanyApplications() {
                                 const idKey = a.id || a.Id;
                                 return (
                                     <tr key={idKey}>
-                                        <td>
-                                            {a.fullName ||
-                                                a.FullName ||
-                                                a.applicantEmail ||
-                                                a.ApplicantEmail ||
-                                                a.companyId}
-                                        </td>
+                                        <td>{a.driverFullName}</td>
                                         <td>{a.driverId}</td>
                                         <td>{a.status || a.Status}</td>
                                         <td>
