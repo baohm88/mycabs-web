@@ -12,8 +12,6 @@ export default function DriverInvitations() {
     });
     const items = data?.items || data?.Items || [];
 
-    console.log("INVITES: ", items);
-
     async function respond(id, accept) {
         try {
             await respondInvitation(id, accept);

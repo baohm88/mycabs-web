@@ -4,23 +4,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/authSlice";
 import CompanyLinks from "../pages/company/CompanyLinks";
 import DriverLinks from "../pages/driver/DriverLinks";
+import { setNavigator } from "../lib/nav";
+import { useEffect } from "react";
 
 export default function AppShell() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isAuthenticated, user, company, driver } = useSelector(
         (s) => s.auth
-    ); // CHANGED
+    );
+
+    useEffect(() => {
+        setNavigator(navigate);
+    }, [navigate]);
+
     const avatarSrc =
         user?.image_url ||
         "https://png.pngtree.com/png-clipart/20240705/original/pngtree-web-programmer-avatar-png-image_15495270.png";
 
     const onLogout = () => {
         dispatch(logout());
-        navigate("/login");
+        navigate("/login", { replace: true });
     };
     const goProfile = () => navigate("/profile");
-    const goNotifications = () => navigate("/notifications");
 
     return (
         <>
@@ -70,24 +76,23 @@ export default function AppShell() {
                                     >
                                         {user?.email || "Account"}
                                     </NavDropdown.Item>
-
                                     <NavDropdown.Item onClick={goProfile}>
                                         Profile
                                     </NavDropdown.Item>
-
                                     {/* Company menu (pass đúng company.id thay vì user.id) */}
-                                    {user?.role === "Company" &&
+
+                                    {["Company", "CompanyOwner"].includes(
+                                        user?.role
+                                    ) &&
                                         company?.id && (
                                             <CompanyLinks
                                                 companyId={company.id}
                                             />
                                         )}
-
                                     {/* Driver menu */}
                                     {user?.role === "Driver" && driver && (
                                         <DriverLinks />
                                     )}
-
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item onClick={onLogout}>
                                         Logout

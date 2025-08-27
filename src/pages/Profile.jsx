@@ -31,10 +31,15 @@ export default function Profile() {
             try {
                 setLoading(true);
                 const data = await getMe();
+
+                console.log("PROFILE: ", data);
+
                 if (data) dispatch(setAuth({ token, profile: data }));
             } catch (err) {
                 if (err?.response?.status === 401) {
-                    toast.error("Phiên đăng nhập đã hết hạn.");
+                    toast.error(
+                        "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại"
+                    );
                     dispatch(logout());
                     navigate("/login");
                 }
@@ -44,7 +49,7 @@ export default function Profile() {
         })();
     }, [token, dispatch]);
 
-    const role = user?.role || "User";
+    const role = user?.role || "Rider";
     const shortId = (id) => (id ? `${id.slice(0, 6)}…${id.slice(-4)}` : "");
 
     return (

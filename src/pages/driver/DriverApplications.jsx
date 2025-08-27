@@ -9,8 +9,6 @@ export default function DriverApplications() {
     });
     const items = data?.items || data?.Items || [];
 
-    console.log("DRIVER APPS:", items);
-
     return (
         <>
             <DriverHeader />
