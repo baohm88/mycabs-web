@@ -19,7 +19,8 @@ export async function respondInvitation(inviteId, accept) {
 }
 
 export async function getMyWallet() {
-    return (await api.get("/api/drivers/me/wallet")).data?.data;
+    const res = await api.get("/api/drivers/me/wallet");
+    return res.data?.data;
 }
 
 export async function getMyTransactions(params) {

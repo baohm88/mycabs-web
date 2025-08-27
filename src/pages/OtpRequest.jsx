@@ -30,8 +30,6 @@ export default function OtpRequest() {
                 }; // purpose: server có thể bỏ qua
                 const res = await api.post("/api/otp/request", payload);
 
-                console.log("RES:", res);
-
                 if (res?.data?.success) {
                     toast.success(
                         "Đã gửi OTP. Xem console của API ở môi trường dev."

@@ -31,8 +31,6 @@ export default function Register() {
                 };
                 const res = await api.post("/api/auth/register", payload);
 
-                console.log("REGISTER RES: ", res.data);
-
                 if (res?.data?.success) {
                     toast.success("Registered successfully! Please verify your email");
                     nav("/otp/request?mode=verify", { replace: true });

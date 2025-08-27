@@ -1,25 +1,23 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE || "http://localhost:5000",
   timeout: 15000,
 });
 
 // ALWAYS attach token from localStorage on every request
-api.interceptors.request.use((config) => {
-  try {
-    const saved = JSON.parse(localStorage.getItem("auth") || "null");
-    const token = saved?.token;
-    if (token) {
-      config.headers = config.headers || {};
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  } catch (_) {
-    // ignore JSON parse errors
-  }
-  return config;
-});
+api.interceptors.request.use(cfg => {
+  // Ưu tiên đọc từ object 'auth', fallback sang 'accessToken' nếu có
+  const authRaw = localStorage.getItem('auth')
+  const token =
+    (authRaw ? JSON.parse(authRaw)?.token : null) ||
+    localStorage.getItem('accessToken')
+
+  if (token) cfg.headers.Authorization = `Bearer ${token}`
+  return cfg
+})
 
 api.interceptors.response.use(
   (res) => res,

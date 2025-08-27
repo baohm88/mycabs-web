@@ -15,12 +15,15 @@ export async function addCompanyService(id, payload) {
 }
 
 export async function getCompanyWallet(id) {
-    return (await api.get(`/api/companies/${id}/wallet`)).data?.data;
+    const res = await api.get(`/api/companies/${id}/wallet`);
+    return res.data?.data;
 }
 
 export async function getCompanyTransactions(id, params) {
-    return (await api.get(`/api/companies/${id}/transactions`, { params })).data
-        ?.data;
+    const res = await api.get(`/api/companies/${id}/transactions`, { params });
+    console.log("COMPANY TXS: ", res);
+
+    return res.data?.data;
 }
 
 export async function topupCompanyWallet(id, payload) {

@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getOpenings, applyToOpening } from "../../lib/drivers";
 import { Table, Form, Button, Badge } from "react-bootstrap";
 import { toast } from "react-toastify";
+import DriverHeader from "./DriverHeader";
 
 export default function DriverOpenings() {
     const qc = useQueryClient();
@@ -25,7 +26,6 @@ export default function DriverOpenings() {
             o.companyId || o.CompanyId || o.company?.id || o.Company?.Id;
         try {
             const res = await applyToOpening({ companyId });
-            console.log("APPLY RES: ", res);
 
             toast.success(res.message);
             qc.invalidateQueries({ queryKey: ["driverAppsMe"] });
@@ -36,6 +36,7 @@ export default function DriverOpenings() {
 
     return (
         <>
+            <DriverHeader />
             <div className="d-flex gap-2 mb-3">
                 <Form.Control
                     placeholder="Tìm company"
