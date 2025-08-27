@@ -199,7 +199,7 @@ export default function Profile() {
                                     <span className="text-muted me-2">
                                         Company ID:
                                     </span>
-                                    {shortId(company?.id)}
+                                    {company?.id}
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <span className="text-muted me-2">
@@ -218,6 +218,90 @@ export default function Profile() {
                                         Address:
                                     </span>
                                     {company?.address || "—"}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <span className="text-muted me-2">
+                                        Membership:
+                                    </span>
+                                    {company?.membership ? (
+                                        <>
+                                            {company.membership.plan} (
+                                            {company.membership.billingCycle})
+                                            {company.membership.expiresAt && (
+                                                <>
+                                                    {" "}
+                                                    · exp:{" "}
+                                                    {new Date(
+                                                        company.membership.expiresAt
+                                                    ).toLocaleDateString()}
+                                                </>
+                                            )}
+                                        </>
+                                    ) : (
+                                        "—"
+                                    )}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <span className="text-muted me-2">
+                                        Wallet:
+                                    </span>
+                                    {company?.walletId || "—"}
+                                </ListGroup.Item>
+                                <ListGroup.Item className="small text-muted">
+                                    Created:{" "}
+                                    {company?.createdAt
+                                        ? new Date(
+                                              company.createdAt
+                                          ).toLocaleString()
+                                        : "—"}{" "}
+                                    · Updated:{" "}
+                                    {company?.updatedAt
+                                        ? new Date(
+                                              company.updatedAt
+                                          ).toLocaleString()
+                                        : "—"}
+                                </ListGroup.Item>
+                                <ListGroup.Item>
+                                    <div className="fw-semibold mb-2">
+                                        Services
+                                    </div>
+                                    {!company?.services?.length ? (
+                                        "—"
+                                    ) : (
+                                        <table className="table table-sm mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Type</th>
+                                                    <th>Title</th>
+                                                    <th className="text-end">
+                                                        Base Price
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {company.services.map(
+                                                    (s, i) => (
+                                                        <tr
+                                                            key={
+                                                                s.serviceId || i
+                                                            }
+                                                        >
+                                                            <td>{i + 1}</td>
+                                                            <td>{s.type}</td>
+                                                            <td>{s.title}</td>
+                                                            <td className="text-end">
+                                                                {Number(
+                                                                    s.basePrice ||
+                                                                        0
+                                                                ).toLocaleString()}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    )}
                                 </ListGroup.Item>
                             </ListGroup>
                         </Card>

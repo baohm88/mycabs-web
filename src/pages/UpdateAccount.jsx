@@ -45,7 +45,7 @@ export default function UpdateAccount() {
 
                 console.log("update account res: ", res);
 
-                toast.success("Account pdated successfully!");
+                toast.success("Account updated successfully!");
                 navigate("/profile");
             } catch (e) {
                 if (e?.response?.status === 401) {

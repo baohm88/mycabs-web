@@ -70,3 +70,11 @@ export async function getInvitations(id, params) {
     return (await api.get(`/api/companies/${id}/invitations`, { params })).data
         ?.data;
 }
+
+export async function getMyCompany(){
+  return (await api.get('/api/companies/me')).data?.data
+}
+
+export async function updateMyCompany(payload){
+  return (await api.put('/api/companies/me', payload)).data?.data
+}

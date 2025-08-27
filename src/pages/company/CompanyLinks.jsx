@@ -4,6 +4,7 @@ import { NavDropdown } from "react-bootstrap";
 function CompanyLinks({ companyId }) {
     return (
         <>
+            <NavDropdown.Item as={Link} to={`/companies/settings`}>Settings</NavDropdown.Item>
             <NavDropdown.Divider />
             {/* <NavDropdown.Header>Company</NavDropdown.Header> */}
             <NavDropdown.Item as={Link} to={`/companies/${companyId}/services`}>Services</NavDropdown.Item>
@@ -11,6 +12,7 @@ function CompanyLinks({ companyId }) {
             <NavDropdown.Item as={Link} to={`/companies/${companyId}/transactions`}>Transactions</NavDropdown.Item>
             <NavDropdown.Item as={Link} to={`/companies/${companyId}/applications`}>Applications</NavDropdown.Item>
             <NavDropdown.Item as={Link} to={`/companies/${companyId}/invitations`}>Invitations</NavDropdown.Item>
+
         </>
     );
 }

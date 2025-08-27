@@ -25,6 +25,7 @@ import CompanyWallet from "./pages/company/CompanyWallet";
 import CompanyTransactions from "./pages/company/CompanyTransactions";
 import CompanyApplications from "./pages/company/CompanyApplications";
 import CompanyInvitations from "./pages/company/CompanyInvitations";
+import CompanySettings from "./pages/company/CompanySettings";
 
 // Drivers
 import DriverOpenings from "./pages/driver/DriverOpenings";
@@ -130,6 +131,14 @@ export default function App() {
                         element={
                             <Protected role="Company">
                                 <CompanyInvitations />
+                            </Protected>
+                        }
+                    />
+                    <Route
+                        path="/companies/settings"
+                        element={
+                            <Protected role="Company">
+                                <CompanySettings />
                             </Protected>
                         }
                     />
