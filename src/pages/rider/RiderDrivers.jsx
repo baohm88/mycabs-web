@@ -4,8 +4,10 @@ import { getDrivers } from "../../lib/riders";
 import { Table, Form, Button } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 import RatingSummary from "../../components/RatingSummary";
+import { useSelector } from "react-redux";
 
 export default function RiderDrivers() {
+    const { role } = useSelector((s) => s.auth);
     const [sp] = useSearchParams();
     const companyId = sp.get("companyId") || undefined;
     const [q, setQ] = useState("");
@@ -15,6 +17,8 @@ export default function RiderDrivers() {
             getDrivers({ page: 1, pageSize: 20, search: q, companyId }),
     });
     const items = data?.items || data?.Items || [];
+
+    const isCompany = role === "Company";
 
     return (
         <>
@@ -33,6 +37,7 @@ export default function RiderDrivers() {
                     <thead>
                         <tr>
                             <th>Full Name</th>
+                            {isCompany && <th>Email</th>}
                             <th>Company</th>
                             <th>Rating</th>
                             <th></th>
@@ -41,8 +46,9 @@ export default function RiderDrivers() {
                     <tbody>
                         {items.map((d) => (
                             <tr key={d.id || d.Id}>
-                                <td>{d.fullName || d.FullName}</td>
-                                <td>{d.companyName || d.CompanyName || "-"}</td>
+                                <td>{d.fullName}</td>
+                                {isCompany && <td>{d.email}</td>}
+                                <td>{d.companyName || "-"}</td>
                                 <td>
                                     <RatingSummary
                                         targetType="driver"
@@ -63,7 +69,7 @@ export default function RiderDrivers() {
                                         to={`/riders/rate?targetType=driver&targetId=${
                                             d.id || d.Id
                                         }&name=${encodeURIComponent(
-                                            d.fullName || d.FullName
+                                            d.fullName
                                         )}`}
                                     >
                                         Đánh giá
