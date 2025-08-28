@@ -18,8 +18,6 @@ export default function CompanyApplications() {
     });
     const items = data?.items || data?.Items || [];
 
-    console.log("CPN APPS: ", items);
-
     async function doApprove(appId) {
         try {
             await approveApplication(id, appId);

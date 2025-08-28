@@ -28,6 +28,7 @@ export default function CompanySettings() {
                     membership: c?.membership || null,
                     services: c?.services || [],
                 });
+                console.log("COMPANY:", c);
             } finally {
                 setLoading(false);
             }

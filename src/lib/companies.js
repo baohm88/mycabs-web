@@ -21,8 +21,6 @@ export async function getCompanyWallet(id) {
 
 export async function getCompanyTransactions(id, params) {
     const res = await api.get(`/api/companies/${id}/transactions`, { params });
-    console.log("COMPANY TXS: ", res);
-
     return res.data?.data;
 }
 
@@ -71,10 +69,10 @@ export async function getInvitations(id, params) {
         ?.data;
 }
 
-export async function getMyCompany(){
-  return (await api.get('/api/companies/me')).data?.data
+export async function getMyCompany() {
+    return (await api.get("/api/companies/me")).data?.data;
 }
 
-export async function updateMyCompany(payload){
-  return (await api.put('/api/companies/me', payload)).data?.data
+export async function updateMyCompany(payload) {
+    return (await api.put("/api/companies/me", payload)).data?.data;
 }
